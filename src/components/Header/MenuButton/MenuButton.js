@@ -1,10 +1,8 @@
+"use client";
+
 import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import { Link } from 'react-router-dom';
+import { Button, Popover, List, ListItem, ListItemText } from "../../../lib/mui";
+
 
 const MenuButton = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -52,7 +50,7 @@ const MenuButton = () => {
           <ListItem button disabled>
             <ListItemText primary="FAQ" />
           </ListItem>
-          <ListItem button component={Link} to="/" onClick={handleClose}>
+          <ListItem button to="/" onClick={handleClose}>
             <ListItemText primary="Current Event" />
           </ListItem>
         </List>

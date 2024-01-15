@@ -2,7 +2,7 @@ import React from 'react';
 import CurrentEventInfo from '../../components/CurrentEventInfo/CurrentEventInfo.js';
 import BookNowButton from '../../components/BookNowButton/BookNowButton.js';
 
-const Home = () => {
+const HomePath = () => {
   return (
     <div style={{ textAlign: 'center' }}>
       <CurrentEventInfo />
@@ -11,4 +11,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePath;
