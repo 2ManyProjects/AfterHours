@@ -4,7 +4,7 @@ import {Button} from '../../lib/mui';
 
 const BookNowButton = () => {
   const handleBookNow = () => {
-    console.log('Booking process initiated');
+    console.log('Booking process click');
   };
 
   return (
