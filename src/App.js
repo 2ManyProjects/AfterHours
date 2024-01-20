@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home.js';
 import Header from './components/Header/Header.js';
-import { Box, Grid, Typography} from "@mui/material";
 // import AboutUs from './pages/AboutUs';
 // import PastEvents from './pages/PastEvents';
 // import ContactUs from './pages/ContactUs';
