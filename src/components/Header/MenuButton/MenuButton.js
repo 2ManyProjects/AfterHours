@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Button, Popover, List, ListItem, ListItemText } from "../../../lib/mui";
+import { Button, Popover, List, ListItem, ListItemText } from '@mui/material';
 
 
 const MenuButton = () => {

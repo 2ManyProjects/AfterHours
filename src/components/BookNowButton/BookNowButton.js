@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import {Button} from '../../lib/mui'; 
+import {Button} from '@mui/material'; 
 
 const BookNowButton = () => {
   const handleBookNow = () => {
