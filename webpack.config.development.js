@@ -1,11 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-
-
-
 module.exports = {
-    mode: 'development',
+  mode: 'development',
   entry: './src/index.js',
   experiments: { topLevelAwait: true },
   output: {
