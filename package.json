@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --open",
-    "dev":"webpack-dev-server --config webpack.config.development.js",
+    "dev": "webpack-dev-server --config webpack.config.development.js",
     "build": "webpack --config webpack.config.production.js"
   },
   "repository": {
@@ -23,12 +23,16 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.5",
     "@mui/material": "^5.15.4",
     "@reduxjs/toolkit": "^2.0.1",
+    "@stripe/react-stripe-js": "^2.4.0",
+    "@stripe/stripe-js": "^2.3.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.5",
+    "email-validator": "^2.0.4",
     "html-webpack-plugin": "^5.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

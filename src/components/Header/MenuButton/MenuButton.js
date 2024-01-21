@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Button, Popover, List, ListItem, ListItemText } from '@mui/material';
+import { Button, Popover, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 const MenuButton = () => {
@@ -20,9 +21,9 @@ const MenuButton = () => {
 
   return (
     <div>
-      <Button aria-describedby={id} variant="contained" onClick={handleClick}>
-        Menu
-      </Button>
+      <IconButton  style={{ color: 'lightgrey' }} aria-label="Directories" onClick={handleClick}>
+        <MenuIcon />
+      </IconButton>
       <Popover
         id={id}
         open={open}

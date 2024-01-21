@@ -32,11 +32,11 @@ const Header = () => {
       <nav>
         {!isLoggedIn ? (
           <>
-            <Button color="inherit" onClick={handleLogin}>Login</Button>
-            <Button color="inherit" onClick={handleSignUp}>Sign Up</Button>
+            <Button color="inherit" disabled onClick={handleLogin}>Login</Button>
+            <Button color="inherit" disabled onClick={handleSignUp}>Sign Up</Button>
           </>
         ) : (
-          <Button color="inherit" onClick={handleLogout}>Log Out</Button>
+          <Button color="inherit" disabled onClick={handleLogout}>Log Out</Button>
         )}
       </nav>
     </header>

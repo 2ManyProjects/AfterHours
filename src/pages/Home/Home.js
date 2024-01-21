@@ -1,6 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
-import { Box, Grid, Typography} from "@mui/material";
+import { Box, Grid, Typography, CardActions} from "@mui/material";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import BookingModal from '../../components/Modal/BookingModal/BookingModal';
+import SuccessModal from '../../components/Modal/BookingModal/SuccessModal';
+
+import { useQuery } from "react-query";
+import axios from "axios";
 
 let images = [
   "https://cdn.pixabay.com/photo/2014/11/05/15/57/salmon-518032_960_720.jpg",
@@ -12,53 +22,120 @@ let images = [
   "https://cdn.pixabay.com/photo/2016/12/06/18/27/cheese-1887233_960_720.jpg",
   "https://cdn.pixabay.com/photo/2016/11/23/18/31/pasta-1854245_960_720.jpg"
 ];
+const StyledCard = styled(Card)(({ theme }) => ({
+  backgroundColor: '#000', // Card background color
+  color: '#fff', // Text color
+  textAlign: 'center',
+  borderRadius: theme.spacing(2), // Adjust border radius as needed
+  // If you have an image, add it here
+  backgroundImage: `url(${Image})`,
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
+  display: 'flex',
+  flexDirection: 'column', // Stack children vertically
+  justifyContent: 'center', // Center children horizontally in the flex container
+  alignItems: 'center', // Align items in the center along the cross axis (horizontally)
+  height: '100%'
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[800], // Adjust button background color
+  color: '#fff', // Button text color
+  '&:hover': {
+    backgroundColor: theme.palette.grey[700], // Button hover color
+  },
+  margin: theme.spacing(2),
+}));
+ 
+
+const retrieveEvents = async () => {
+  const response = await axios.get("https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/available");
+  // console.log(response?.data?.data);
+  return response?.data?.data;
+};
 
 
 export default function Home() {
-  return (
-    <div> 
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
-              <Box className="z-10 items-center font-mono text-sm">
-        
-                <div className="after:content relative mb-5 flex h-[629px] flex-col items-center justify-end gap-4 overflow-hidden rounded-lg bg-white/10 px-6 pb-16 pt-64 text-center text-white shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight lg:pt-0">
-                  <div className="absolute inset-0 flex items-center justify-center opacity-20"> 
-                    <span className="absolute left-0 right-0 bottom-0 h-[400px] bg-gradient-to-b from-black/0 via-black to-black"></span>
-                  </div> 
-                  <h1 className="mt-8 mb-4 text-base font-bold uppercase tracking-widest">
-                    Bloom and Blight Dinner
-                  </h1>
-                  <p className="max-w-[40ch] text-white/75 sm:max-w-[32ch]">
-                    Heres a little 2 sentence ddescription of the upcoming event
-                  </p>
-                  <a
-                    className="pointer z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold text-black transition hover:bg-white/10 hover:text-white md:mt-4"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Buy Ticket - $45
-                  </a>
-                </div>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Grid container spacing={2}>
-                {images.map((item, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
-                    <img
-                      alt="Event photograph"
-                      className="rounded-lg brightness-90 transition group-hover:brightness-110"
-                      src={item}
-                      loading="lazy"
-                      style={{ width: '100%', height: 'auto' }}
+    const [openBookingModal, setOpenBookingModal] = useState(false);
+
+    const { data, error, isLoading } = useQuery("postsData", retrieveEvents);
+    // console.log(data)
+    let hasTickets = false;
+    let maxTickets = 0;
+    if(data?.length > 0 && data[0]?.availableTickets > 0)
+      hasTickets = true;
+    if(data?.length > 0){
+      maxTickets = data[0]?.maxTickets;
+      if(data[0].overFlowAllowed){
+        maxTickets += data[0]?.overFlowMax
+      }
+    }
+
+    return (
+      <div> 
+        <SuccessModal/>
+        {!isLoading && !error && data?.length > 0 && <BookingModal open={openBookingModal} eventId={data[0].id} onClose={() => setOpenBookingModal(false)}/>}
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={4}>
+                {!isLoading && !error && data?.length > 0 && <StyledCard>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {data[0]?.name}
+                    </Typography>
+                    <Typography variant="body2" >
+                      {data[0]?.date} {data[0]?.time}
+                    </Typography>
+                    <CardMedia
+                      component="img"
+                      height="140" // Adjust the height as needed
+                      image={images[0]} // Replace with the path to your image
+                      alt="Dinner Image"
                     />
-                  </Grid>
-                ))}
+                    <Typography variant="body2" >
+                      {data[0]?.location}
+                    </Typography>
+                    <Typography variant="body2" >
+                      {data[0]?.address}
+                    </Typography>
+                    <Typography variant="body2" >
+                      {data[0]?.availableTickets} / {maxTickets}
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography variant="body2" >
+                      {data[0]?.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    {!hasTickets && 
+                    <StyledButton disabled size="large" variant="contained">
+                      Sold Out
+                    </StyledButton>}
+                    {hasTickets && <StyledButton onClick={() => setOpenBookingModal(!openBookingModal)}size="large" variant="contained">
+                      Buy Ticket - ${data[0]?.ticketPrice}
+                    </StyledButton>}
+                  </CardActions>
+                </StyledCard>}
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <Grid container spacing={2}>
+                  {images.map((item, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                      <img
+                        alt="Event photograph"
+                        className="rounded-lg brightness-90 transition group-hover:brightness-110"
+                        src={item}
+                        loading="lazy"
+                        style={{ width: '100%', height: 'auto' }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Box>
-    </div>
-  )
+          </Box>
+      </div>
+    )
 }
