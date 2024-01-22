@@ -4,6 +4,8 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import { Button, Box } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function CheckoutForm({clientSecret, email}) {
     // console.log(clientSecret)
@@ -80,15 +82,26 @@ export default function CheckoutForm({clientSecret, email}) {
 
     return (
     <form id="payment-form" onSubmit={handleSubmit}>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center', // This will center the child components vertically
+            alignItems: 'center',}}>
+            {isLoading && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+                </div>
+            )}
+            <PaymentElement id="payment-element" options={paymentElementOptions} />
+            <Button disabled={isLoading || !stripe || !elements} id="submit">
+            <span id="button-text">
+                {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+            </span>
+            </Button>
+            {/* Show any error or success messages */}
+            {message && <div id="payment-message">{message}</div>}
 
-        <PaymentElement id="payment-element" options={paymentElementOptions} />
-        <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-            {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-        </button>
-        {/* Show any error or success messages */}
-        {message && <div id="payment-message">{message}</div>}
+        </Box>
     </form>
     );
 }

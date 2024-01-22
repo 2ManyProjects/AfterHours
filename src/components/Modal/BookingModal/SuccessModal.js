@@ -35,6 +35,7 @@ function SuccessModal() {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+    // width: { xs: '90vw', sm: '33vw' },  
     width: fullScreen ? '90%' : 400,
     bgcolor: 'background.paper',
     boxShadow: 24,
