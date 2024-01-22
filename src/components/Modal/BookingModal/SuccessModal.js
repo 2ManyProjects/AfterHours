@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { keyframes } from '@emotion/react';
@@ -7,6 +7,7 @@ import { keyframes } from '@emotion/react';
 function SuccessModal() {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
+  let navigate = useNavigate();
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -23,6 +24,10 @@ function SuccessModal() {
 
   const handleClose = () => {
     setShowModal(false); 
+    
+    navigate({
+      pathname: window.location.pathname,
+    }, { replace: true });
   };
 
   const fadeIn = keyframes`
