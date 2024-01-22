@@ -43,6 +43,7 @@ export default function CheckoutForm({clientSecret, email}) {
     }, [stripe]);
 
     const handleSubmit = async (e) => {
+        console.log("HandleSubmit")
         e.preventDefault();
 
         if (!stripe || !elements) {
@@ -53,7 +54,7 @@ export default function CheckoutForm({clientSecret, email}) {
 
         setIsLoading(true);
 
-        const { error } = await stripe.confirmPayment({
+        const stripeResponse = await stripe.confirmPayment({
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
@@ -61,6 +62,8 @@ export default function CheckoutForm({clientSecret, email}) {
                 receipt_email: email,
             },
         });
+        const { error } = stripeResponse ;
+        console.log(stripeResponse)
 
         // This point will only be reached if there is an immediate error when
         // confirming the payment. Otherwise, your customer will be redirected to
@@ -81,7 +84,7 @@ export default function CheckoutForm({clientSecret, email}) {
     }
 
     return (
-    <form id="payment-form" onSubmit={handleSubmit}>
+    <form id="payment-form" >
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -93,7 +96,7 @@ export default function CheckoutForm({clientSecret, email}) {
                 </div>
             )}
             <PaymentElement id="payment-element" options={paymentElementOptions} />
-            <Button disabled={isLoading || !stripe || !elements} id="submit">
+            <Button disabled={isLoading || !stripe || !elements} id="submit" onClick={handleSubmit}>
             <span id="button-text">
                 {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
             </span>

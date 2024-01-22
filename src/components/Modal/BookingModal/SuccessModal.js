@@ -52,14 +52,14 @@ function SuccessModal() {
     <Modal open={showModal} onClose={handleClose}>
       <Box sx={modalStyle}>
         <CheckCircleOutlineIcon sx={{ fontSize: 60, color: 'success.main' }} />
-        <Typography variant="h6" sx={{ fontSize: 20, color: 'success.main' }} component="h2" textAlign="center">
-          Payment Successful
-        </Typography>
         <Typography variant="body1" sx={{ fontSize: 20, color: 'success.main' }} textAlign="center">
           Your payment was processed successfully!
         </Typography>
         <Typography variant="body2" sx={{ fontSize: 20, color: 'success.main' }} textAlign="center">
           Your tickets should be emailed to you shortly
+        </Typography>
+        <Typography variant="body2" sx={{ fontSize: 14, color: 'success.main' }} textAlign="center">
+          Please check your spam folder
         </Typography>
         <Button variant="contained" color="success" onClick={handleClose}>
           Close
