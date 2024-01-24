@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import BookingModal from '../../components/Modal/BookingModal/BookingModal';
 import SuccessModal from '../../components/Modal/BookingModal/SuccessModal';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -47,17 +49,27 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
   margin: theme.spacing(2),
 }));
- 
-
-const retrieveEvents = async () => {
-  const response = await axios.get("https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/available");
-  // console.log(response?.data?.data);
-  return response?.data?.data;
-};
-
 
 export default function Home() {
     const [openBookingModal, setOpenBookingModal] = useState(false);
+    const [alertData, setAlertData] = useState(null);
+ 
+
+    const retrieveEvents = async () => {
+      const response = await axios.get("https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/available");
+      // console.log(response?.data?.data);
+      return response?.data?.data;
+    };
+
+    const verifyQRData = async(qrData, eventId) => {
+      const response = await axios.get(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {params: {userEmail: qrData.userEmail, id: qrData.id, secretKey: qrData.secretKey}}).then((result) => {
+        setAlertData({type: "success", msg: "User Is Authorized"})
+      }).catch(e => {
+        setAlertData({type: "warning", msg: "User is Not Authorized"})
+      });
+      // console.log(response)
+    }
+
 
     const { data, error, isLoading } = useQuery("postsData", retrieveEvents);
     // console.log(data)
@@ -76,6 +88,16 @@ export default function Home() {
       <div> 
         <SuccessModal/>
         {!isLoading && !error && data?.length > 0 && <BookingModal open={openBookingModal} eventId={data[0].id} onClose={() => setOpenBookingModal(false)}/>}
+        <Snackbar open={!!alertData} autoHideDuration={6000} onClose={() => setAlertData(null)}>
+          <Alert
+            onClose={() => setAlertData(null)}
+            severity={alertData?.type}
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {alertData?.msg}
+          </Alert>
+        </Snackbar>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
@@ -116,6 +138,9 @@ export default function Home() {
                     {hasTickets && <StyledButton onClick={() => setOpenBookingModal(!openBookingModal)}size="large" variant="contained">
                       Buy Ticket - ${data[0]?.ticketPrice}
                     </StyledButton>}
+                    {/* <StyledButton onClick={() => verifyQRData({"index":10,"userEmail":"shaivkamat@gmail.com","secretKey":"eefa692d-25de-4776-b3a9-64ab1196c82a","id":"c9ac916c-ba4d-4edc-bb48-d02359757d57-10"}, data[0]?.id)}size="large" variant="contained">
+                      Test Ticket Verification
+                    </StyledButton> */}
                   </CardActions>
                 </StyledCard>}
               </Grid>

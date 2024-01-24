@@ -33,7 +33,7 @@ const BookingModal = ({ open, onClose, eventId }) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex pattern
 
     const initPayment = async () => { 
-        const response = await axios.post(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {ticketQuantity: 1});
+        const response = await axios.post(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {ticketQuantity: 1, allergen, allergenSeverity, notes});
         console.log(response?.data?.data?.clientSecret);
         setClientSecret(response?.data?.data?.clientSecret)
         return response?.data?.data?.clientSecret;
@@ -42,7 +42,7 @@ const BookingModal = ({ open, onClose, eventId }) => {
 ///v1/event/{eventId}/payments
     useEffect(() => {
 
-        if(currentStage === 1 && paymentMethod === ccId){
+        if(currentStage === 2 && paymentMethod === ccId){
             initPayment();
         }
     },[currentStage] )
