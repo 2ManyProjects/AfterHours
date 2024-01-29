@@ -16,12 +16,16 @@ const QrReader = () => {
     const onScanSuccess = async (result) => {
         // 🖨 Print the "result" to browser console.
         console.log(result);
-        let cams = QrScanner.listCameras(true);
+        let cams = await QrScanner.listCameras(true);
         // ✅ Handle success.
         // 😎 You can do whatever you want with the scanned result.
         setScannedResult({SCANNED: result?.data, cameras: cams});
       };
-    
+      const getCams = async() => {
+
+        let cams = await QrScanner.listCameras(true);
+        alert(JSON.stringify(cams))
+      }
       // Fail
       const onScanFail = (err) => {
         // 🖨 Print the "err" to browser console.
@@ -29,6 +33,7 @@ const QrReader = () => {
       };
     
       useEffect(() => {
+        getCams();
         if (videoEl?.current && !scanner.current) {
           // 👉 Instantiate the QR Scanner
           
