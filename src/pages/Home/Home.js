@@ -10,6 +10,7 @@ import BookingModal from '../../components/Modal/BookingModal/BookingModal';
 import SuccessModal from '../../components/Modal/BookingModal/SuccessModal';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import QrReader from '../../components/QrReader/QrReader';
 
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -52,6 +53,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 export default function Home() {
     const [openBookingModal, setOpenBookingModal] = useState(false);
+    const [scanningModal, setOpenScanningModal] = useState(false);
     const [alertData, setAlertData] = useState(null);
  
 
@@ -98,6 +100,23 @@ export default function Home() {
             {alertData?.msg}
           </Alert>
         </Snackbar>
+        {scanningModal && <QrReader
+        //   facingMode='environment'
+        //   showViewFinder={true}
+        //   resolution={500}
+        //   viewFinder={{ //any valid JS-CSS can be added here
+        //     border: '12px solid rgba(255,255,255,0.3)',
+        //     position: 'absolute',
+        //     borderRadius: '5px',
+        //     width: '250px',
+        //     height: '250px'
+        // }}
+        //   onError={(err) => {console.log(err)}}
+        //   onScan={(data) => {console.log(data)
+        //     alert(data);
+        //     setOpenScanningModal(false);
+        //   }}
+          />}
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
@@ -138,6 +157,12 @@ export default function Home() {
                     {hasTickets && <StyledButton onClick={() => setOpenBookingModal(!openBookingModal)}size="large" variant="contained">
                       Buy Ticket - ${data[0]?.ticketPrice}
                     </StyledButton>}
+                    <StyledButton onClick={async () =>{
+                      await navigator.mediaDevices.getUserMedia({ video: true })
+                      setOpenScanningModal(!scanningModal)
+                      }}size="large" variant="contained">
+                      Scan Ticket
+                    </StyledButton>
                     {/* <StyledButton onClick={() => verifyQRData({"index":10,"userEmail":"shaivkamat@gmail.com","secretKey":"eefa692d-25de-4776-b3a9-64ab1196c82a","id":"c9ac916c-ba4d-4edc-bb48-d02359757d57-10"}, data[0]?.id)}size="large" variant="contained">
                       Test Ticket Verification
                     </StyledButton> */}
