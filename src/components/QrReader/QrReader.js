@@ -24,7 +24,25 @@ const QrReader = () => {
       const getCams = async() => {
 
         let cams = await QrScanner.listCameras(true);
-        alert(JSON.stringify(cams))
+        // alert(JSON.stringify(cams))
+        let camera = cams.find(item => item.label.includes("back"));
+        
+        scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
+        onDecodeError: onScanFail,
+        // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
+        preferredCamera: "user",
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+        overlay: qrBoxEl?.current || undefined,
+        });
+        scanner.current.setCamera(camera.id)
+        // 🚀 Start QR Scanner
+        scanner?.current
+        ?.start()
+        .then(() => setQrOn(true))
+        .catch((err) => {
+            if (err) setQrOn(false);
+        });
       }
       // Fail
       const onScanFail = (err) => {
@@ -33,26 +51,9 @@ const QrReader = () => {
       };
     
       useEffect(() => {
-        getCams();
         if (videoEl?.current && !scanner.current) {
+            getCams();
           // 👉 Instantiate the QR Scanner
-          
-          scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
-            onDecodeError: onScanFail,
-            // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
-            preferredCamera: "user",
-            highlightScanRegion: true,
-            highlightCodeOutline: true,
-            overlay: qrBoxEl?.current || undefined,
-          });
-    
-          // 🚀 Start QR Scanner
-          scanner?.current
-            ?.start()
-            .then(() => setQrOn(true))
-            .catch((err) => {
-              if (err) setQrOn(false);
-            });
         }
     
         
