@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import QrFrame from "./qr-frame.svg";
 
-const QrReader = () => {
+const QrReader = ({checkValid}) => {
 
     const scanner = useRef();
     const videoEl = useRef(null);
@@ -18,6 +18,7 @@ const QrReader = () => {
         console.log(result);
         // ✅ Handle success.
         // 😎 You can do whatever you want with the scanned result.
+        checkValid(result?.data);
         setScannedResult( result?.data);
       };
       const getCams = async() => {
@@ -28,13 +29,12 @@ const QrReader = () => {
         
         scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
         onDecodeError: onScanFail,
-        // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
         preferredCamera: camera.id,
         highlightScanRegion: true,
         highlightCodeOutline: true,
         overlay: qrBoxEl?.current || undefined,
         });
-        alert(camera.id)
+        // alert(camera.id)
         await scanner.current.setCamera(camera.id)
         // 🚀 Start QR Scanner
         scanner?.current

@@ -101,21 +101,10 @@ export default function Home() {
           </Alert>
         </Snackbar>
         {scanningModal && <QrReader
-        //   facingMode='environment'
-        //   showViewFinder={true}
-        //   resolution={500}
-        //   viewFinder={{ //any valid JS-CSS can be added here
-        //     border: '12px solid rgba(255,255,255,0.3)',
-        //     position: 'absolute',
-        //     borderRadius: '5px',
-        //     width: '250px',
-        //     height: '250px'
-        // }}
-        //   onError={(err) => {console.log(err)}}
-        //   onScan={(data) => {console.log(data)
-        //     alert(data);
-        //     setOpenScanningModal(false);
-        //   }}
+        checkValid={(qrData) => {
+          verifyQRData(qrData, data[0].id)
+          setOpenScanningModal(false);
+        }}
           />}
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
