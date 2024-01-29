@@ -29,12 +29,13 @@ const QrReader = () => {
         scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
         onDecodeError: onScanFail,
         // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
-        preferredCamera: "user",
+        preferredCamera: camera.id,
         highlightScanRegion: true,
         highlightCodeOutline: true,
         overlay: qrBoxEl?.current || undefined,
         });
-        scanner.current.setCamera(camera.id)
+        alert(camera.id)
+        // scanner.current.setCamera(camera.id)
         // 🚀 Start QR Scanner
         scanner?.current
         ?.start()
