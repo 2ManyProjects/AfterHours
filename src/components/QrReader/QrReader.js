@@ -35,7 +35,7 @@ const QrReader = () => {
         overlay: qrBoxEl?.current || undefined,
         });
         alert(camera.id)
-        // scanner.current.setCamera(camera.id)
+        await scanner.current.setCamera(camera.id)
         // 🚀 Start QR Scanner
         scanner?.current
         ?.start()
