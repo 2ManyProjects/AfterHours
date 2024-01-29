@@ -13,12 +13,13 @@ const QrReader = () => {
 
   const [scannedResult, setScannedResult] = useState("");
     // Success
-    const onScanSuccess = (result) => {
+    const onScanSuccess = async (result) => {
         // 🖨 Print the "result" to browser console.
         console.log(result);
+        let cams = QrScanner.listCameras(true);
         // ✅ Handle success.
         // 😎 You can do whatever you want with the scanned result.
-        setScannedResult(result?.data);
+        setScannedResult({SCANNED: result?.data, cameras: cams});
       };
     
       // Fail
@@ -30,15 +31,13 @@ const QrReader = () => {
       useEffect(() => {
         if (videoEl?.current && !scanner.current) {
           // 👉 Instantiate the QR Scanner
+          
           scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
             onDecodeError: onScanFail,
             // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
             preferredCamera: "user",
-            // 🖼 This will help us position our "QrFrame.svg" so that user can only scan when qr code is put in between our QrFrame.svg.
             highlightScanRegion: true,
-            // 🔥 This will produce a yellow (default color) outline around the qr code that we scan, showing a proof that our qr-scanner is scanning that qr code.
             highlightCodeOutline: true,
-            // 📦 A custom div which will pair with "highlightScanRegion" option above 👆. This gives us full control over our scan region.
             overlay: qrBoxEl?.current || undefined,
           });
     
@@ -51,8 +50,7 @@ const QrReader = () => {
             });
         }
     
-        // 🧹 Clean up on unmount.
-        // 🚨 This removes the QR Scanner from rendering and using camera when it is closed or removed from the UI.
+        
         return () => {
           if (!videoEl?.current) {
             scanner?.current?.stop();
@@ -60,7 +58,7 @@ const QrReader = () => {
         };
       }, []);
     
-      // ❌ If "camera" is not allowed in browser permissions, show an alert.
+      
       useEffect(() => {
         if (!qrOn)
           alert(
@@ -72,9 +70,6 @@ const QrReader = () => {
         <div className="qr-reader">
           {/* QR */}
           <video ref={videoEl}></video>
-          
-    
-          {/* Show Data Result if scan is success */}
           {scannedResult && (
             <p
               style={{
