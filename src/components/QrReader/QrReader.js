@@ -16,10 +16,9 @@ const QrReader = () => {
     const onScanSuccess = async (result) => {
         // 🖨 Print the "result" to browser console.
         console.log(result);
-        let cams = await QrScanner.listCameras(true);
         // ✅ Handle success.
         // 😎 You can do whatever you want with the scanned result.
-        setScannedResult({SCANNED: result?.data, cameras: cams});
+        setScannedResult( result?.data);
       };
       const getCams = async() => {
 
