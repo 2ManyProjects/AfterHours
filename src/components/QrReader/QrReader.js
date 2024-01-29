@@ -33,7 +33,7 @@ const QrReader = () => {
           scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
             onDecodeError: onScanFail,
             // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
-            preferredCamera: "environment",
+            preferredCamera: "user",
             // 🖼 This will help us position our "QrFrame.svg" so that user can only scan when qr code is put in between our QrFrame.svg.
             highlightScanRegion: true,
             // 🔥 This will produce a yellow (default color) outline around the qr code that we scan, showing a proof that our qr-scanner is scanning that qr code.
@@ -72,15 +72,7 @@ const QrReader = () => {
         <div className="qr-reader">
           {/* QR */}
           <video ref={videoEl}></video>
-          <div ref={qrBoxEl} className="qr-box">
-            <img
-              src={QrFrame}
-              alt="Qr Frame"
-              width={256}
-              height={256}
-              className="qr-frame"
-            />
-          </div>
+          
     
           {/* Show Data Result if scan is success */}
           {scannedResult && (
