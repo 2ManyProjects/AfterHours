@@ -87,7 +87,7 @@ export default function Home() {
     return (
       <div> 
         <SuccessModal/>
-        {!isLoading && !error && data?.length > 0 && <BookingModal open={openBookingModal} eventId={data[0].id} onClose={() => setOpenBookingModal(false)}/>}
+        {!isLoading && !error && data?.length > 0 && <BookingModal open={openBookingModal} ticketPrice={data[0].ticketPrice}eventId={data[0].id} onClose={() => setOpenBookingModal(false)}/>}
         <Snackbar open={!!alertData} autoHideDuration={6000} onClose={() => setAlertData(null)}>
           <Alert
             onClose={() => setAlertData(null)}

@@ -13,7 +13,7 @@ export default function CheckoutForm({clientSecret, email}) {
     const elements = useElements();
 
     const [message, setMessage] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (!stripe) {
@@ -39,6 +39,7 @@ export default function CheckoutForm({clientSecret, email}) {
                 setMessage("");
                 break;
             }
+            setIsLoading(false);
         });
     }, [stripe]);
 

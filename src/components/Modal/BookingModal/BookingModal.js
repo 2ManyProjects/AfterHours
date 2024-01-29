@@ -8,35 +8,67 @@ import {
     useElements,
     Elements
   } from "@stripe/react-stripe-js";
-  import { loadStripe } from "@stripe/stripe-js";
-  import axios from 'axios'; 
-  import CheckoutForm from "./CheckoutForm";
-
-import { useQuery } from "react-query";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from 'axios'; 
+import CheckoutForm from "./CheckoutForm";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import Tooltip from '@mui/material/Tooltip';
+import CircularProgress from '@mui/material/CircularProgress'; 
 //
 const stages = ['Payment Method', 'Dietary & Allergens', 'Payment Details']; 
 
 
 const stripePromise = loadStripe("pk_test_51OapAiKs38rzN4gUyWjhXy3UeuJSVDz0dNgbIclUebfolO5w6DPNfcEzWsp7ru50HY7Owsv7v5oGB1vt4NsQN3V800xQi79AZ2");
 
-
-const BookingModal = ({ open, onClose, eventId }) => {
+function CopyBox({ text, copyText }) {
+    const handleCopy = () => {
+      navigator.clipboard.writeText(copyText).then(() => {
+        
+        console.log(copyText, 'Text copied to clipboard');
+      }, (err) => {
+        
+        console.error(copyText, 'Could not copy text: ', err);
+      });
+    };
+  
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: 'column' }}>
+        <Typography variant="body1">{text}</Typography>
+        <Tooltip title="Copy to clipboard">
+          <IconButton onClick={handleCopy}>
+            <ContentCopyIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    );
+  }
+const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
     const [currentStage, setCurrentStage] = useState(0);
     const [paymentMethod, setPaymentMethod] = useState('');
-    
+    const [transactionConfirmationCode, setTransactionConfirmationCode] = useState(null);
     const [dietaryRestriction, setDietaryRestriction] = useState('');
     const [allergen, setAllergen] = useState('');
     const [allergenSeverity, setAllergenSeverity] = useState('');
     const [notes, setNotes] = useState('');
     const [email, setEmail] = useState('');
+    const [fetching, setFetching] = useState(false);
     const [clientSecret, setClientSecret] = useState('');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex pattern
 
     const initPayment = async () => { 
         const response = await axios.post(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {ticketQuantity: 1, allergen, allergenSeverity, notes});
-        console.log(response?.data?.data?.clientSecret);
+        
         setClientSecret(response?.data?.data?.clientSecret)
         return response?.data?.data?.clientSecret;
+    };
+
+    const initEtransfer = async () => { 
+        setFetching(true);
+        const response = await axios.put(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {ticketQuantity: 1, allergen, allergenSeverity, notes, email});
+        
+        setTransactionConfirmationCode(response?.data?.data?.code);
+        setFetching(false);
+        return response?.data?.data?.code;
     };
     // const { data, error, isLoading } = useQuery("initPayment", initPayment);
 ///v1/event/{eventId}/payments
@@ -102,7 +134,7 @@ const BookingModal = ({ open, onClose, eventId }) => {
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Payment Method</FormLabel>
                         <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-                        <FormControlLabel value={etranId} disabled sx={{ color: 'black' }} control={<Radio />} label="E-Transfer" />
+                        <FormControlLabel value={etranId} sx={{ color: 'black' }} control={<Radio />} label="E-Transfer" />
                         <FormControlLabel value={ccId} sx={{ color: 'black' }} control={<Radio />} label="Credit/Debit Card" />
                     </RadioGroup>
                     <TextField
@@ -147,12 +179,26 @@ const BookingModal = ({ open, onClose, eventId }) => {
             );
         case 2:
             return paymentMethod === etranId ? (
-            <Typography>Placeholder for E-Transfer Instructions</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: 'column' }}>
+                    <Typography>E-Transfer ${ticketPrice} (CAD)</Typography>
+                    {!transactionConfirmationCode && <Button onClick={initEtransfer} disabled={fetching} >Confirm Ticket For E-transfer Instructions</Button>}
+                    {transactionConfirmationCode && <Typography>Include the following in the Message box of the E-transfer</Typography>}
+                    {transactionConfirmationCode && <CopyBox text={transactionConfirmationCode} copyText={transactionConfirmationCode}/>}
+                    {transactionConfirmationCode && <CopyBox text={"send to Payments@mail.afterhours.2many.ca"} copyText={"Payments@mail.afterhours.2many.ca"}/>}
+                    {transactionConfirmationCode && <Typography>Set the transaction password to</Typography>}
+                    {transactionConfirmationCode && <CopyBox text={"AfterHours"} copyText={"AfterHours"}/>}
+                </Box>
             ) : (
-    <>      {(clientSecret) && (
+            <>
+                {(clientSecret) && (
                 <Elements options={options} stripe={stripePromise}>
                   <CheckoutForm clientSecret={clientSecret} email={email}/>
                 </Elements>
+              )}
+              {!clientSecret && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+                </div>
               )}
               
             </>
