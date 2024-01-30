@@ -105,6 +105,19 @@ import "./QrStyles.css";
 import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import QrFrame from "./qr-frame.svg";
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
+
+
+const StyledButton = styled(Button)(({ theme }) => ({
+    backgroundColor: theme.palette.grey[800], // Adjust button background color
+    color: '#fff', // Button text color
+    '&:hover': {
+      backgroundColor: theme.palette.grey[700], // Button hover color
+    },
+    margin: theme.spacing(2),
+  }));
 
 const QrReader = ({ checkValid }) => {
   const videoEl = useRef(null);
@@ -175,7 +188,9 @@ const QrReader = ({ checkValid }) => {
       {scannedResult && <p style={{ position: "absolute", top: 0, left: 0, zIndex: 99999, color: "white" }}>
         Scanned Result: {scannedResult}
       </p>}
-      {cameras.length > 1 && <button onClick={toggleCamera}>Switch Camera</button>}
+      {cameras.length > 1 && <StyledButton onClick={toggleCamera} size="large" variant="contained">
+                                Switch Camera
+                             </StyledButton>}
     </div>
   );
 };
