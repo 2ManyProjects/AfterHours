@@ -6,7 +6,7 @@ import QrFrame from "./qr-frame.svg";
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
-import { Modal, Box, Typography,  useTheme, useMediaQuery } from '@mui/material';
+
 
 const StyledButton = styled(Button)(({ theme }) => ({
     backgroundColor: theme.palette.grey[800], // Adjust button background color
@@ -80,37 +80,16 @@ const QrReader = ({ checkValid }) => {
     }
   }, [qrOn]);
 
-  const fadeIn = keyframes`
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-  `;
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    // width: { xs: '90vw', sm: '33vw' },  
-    width: fullScreen ? '90%' : 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 2,
-    animation: `${fadeIn} 500ms ease-out`
-  };
   return (
-  <Modal open={true}>
     <div className="qr-reader">
       <video ref={videoEl}></video>
+      {scannedResult && <p style={{ position: "absolute", top: 0, left: 0, zIndex: 99999, color: "white" }}>
+        Scanned Result: {scannedResult}
+      </p>}
       {cameras.length > 1 && <StyledButton onClick={toggleCamera} size="large" variant="contained">
                                 Switch Camera
                              </StyledButton>}
     </div>
-    </Modal>
   );
 };
 
