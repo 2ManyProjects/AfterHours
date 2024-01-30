@@ -43,7 +43,6 @@ const QrReader = ({checkValid}) => {
         });
         // alert(camera.id)
         await scanner.current.setCamera(camera.id)
-        // 🚀 Start QR Scanner
         scanner?.current
         ?.start()
         .then(() => setQrOn(true))
