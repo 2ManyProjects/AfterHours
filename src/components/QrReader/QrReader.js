@@ -18,7 +18,7 @@ const QrReader = ({checkValid}) => {
         console.log(result);
         // ✅ Handle success.
         // 😎 You can do whatever you want with the scanned result.
-        checkValid(result?.data);
+        checkValid(JSON.parse(result?.data));
         setScannedResult( result?.data);
       };
       const getCams = async() => {
