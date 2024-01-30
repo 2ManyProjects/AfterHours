@@ -14,11 +14,17 @@ const QrReader = ({checkValid}) => {
   const [scannedResult, setScannedResult] = useState("");
     // Success
     const onScanSuccess = async (result) => {
-        // 🖨 Print the "result" to browser console.
         console.log(result);
-        // ✅ Handle success.
-        // 😎 You can do whatever you want with the scanned result.
-        checkValid(JSON.parse(result?.data));
+        let codes = result?.data.split('#');
+        if(codes.length !== 4)
+            return
+        let codeObj = {
+            index: codes[0],
+            userEmail: codes[1],
+            secretKey: codes[2],
+            id: codes[3],
+        }
+        checkValid(codeObj);
         setScannedResult( result?.data);
       };
       const getCams = async() => {
