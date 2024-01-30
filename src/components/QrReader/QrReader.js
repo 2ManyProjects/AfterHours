@@ -2,7 +2,7 @@ import "./QrStyles.css";
 import { useEffect, useRef, useState } from "react";
 // Qr Scanner
 import QrScanner from "qr-scanner";
-import QrFrame from "./qr-frame.svg";
+import BarcodeScannerComponent from "react-qr-barcode-scanner";
 
 const QrReader = ({checkValid}) => {
 
@@ -14,7 +14,7 @@ const QrReader = ({checkValid}) => {
   const [scannedResult, setScannedResult] = useState("");
     // Success
     const onScanSuccess = async (result) => {
-        console.log(result);
+        alert(result);
         let codes = result?.data.split('#');
         if(codes.length < 4)
             return
@@ -56,32 +56,45 @@ const QrReader = ({checkValid}) => {
         console.log(err);
       };
     
-      useEffect(() => {
-        if (videoEl?.current && !scanner.current) {
-            getCams();
-          // 👉 Instantiate the QR Scanner
-        }
+    //   useEffect(() => {
+    //     if (videoEl?.current && !scanner.current) {
+    //         getCams();
+    //       // 👉 Instantiate the QR Scanner
+    //     }
     
         
-        return () => {
-          if (!videoEl?.current) {
-            scanner?.current?.stop();
-          }
-        };
-      }, []);
+    //     return () => {
+    //       if (!videoEl?.current) {
+    //         scanner?.current?.stop();
+    //       }
+    //     };
+    //   }, []);
     
       
-      useEffect(() => {
-        if (!qrOn)
-          alert(
-            "Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
-          );
-      }, [qrOn]);
+    //   useEffect(() => {
+    //     if (!qrOn)
+    //       alert(
+    //         "Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
+    //       );
+    //   }, [qrOn]);
     
       return (
         <div className="qr-reader">
           {/* QR */}
-          <video ref={videoEl}></video>
+        <BarcodeScannerComponent
+            width={500}
+            height={500}
+            onUpdate={(err, result) => {
+                if (result) onScanSuccess(result?.text);
+                else {
+                    alert(err)
+                    alert(result)
+                }
+            // if (result) setData(result.text);
+            // else setData("Not Found");
+            }}
+        />
+          {/* <video ref={videoEl}></video>
           {scannedResult && (
             <p
               style={{
@@ -94,7 +107,7 @@ const QrReader = ({checkValid}) => {
             >
               Scanned Result: {scannedResult}
             </p>
-          )}
+          )} */}
         </div>
       );
 }
