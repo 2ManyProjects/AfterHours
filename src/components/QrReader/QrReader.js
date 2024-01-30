@@ -25,7 +25,6 @@ const QrReader = ({ checkValid }) => {
   const [scannedResult, setScannedResult] = useState("");
 
   const onScanSuccess = async (result) => {
-    alert(result);
     let codes = result?.data.split('#');
     if (codes.length < 4) return;
     let codeObj = {
@@ -82,13 +81,13 @@ const QrReader = ({ checkValid }) => {
 
   return (
     <div className="qr-reader">
+      {cameras.length > 1 && <StyledButton onClick={toggleCamera} size="large" variant="contained">
+                                Switch Camera
+                             </StyledButton>}
       <video ref={videoEl}></video>
       {scannedResult && <p style={{ position: "absolute", top: 0, left: 0, zIndex: 99999, color: "white" }}>
         Scanned Result: {scannedResult}
       </p>}
-      {cameras.length > 1 && <StyledButton onClick={toggleCamera} size="large" variant="contained">
-                                Switch Camera
-                             </StyledButton>}
     </div>
   );
 };
