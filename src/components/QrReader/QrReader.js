@@ -1,106 +1,4 @@
-/*
-import "./QrStyles.css";
-import { useEffect, useRef, useState } from "react";
-// Qr Scanner
-import QrScanner from "qr-scanner";
-import QrFrame from "./qr-frame.svg";
-
-const QrReader = ({checkValid}) => {
-
-    const scanner = useRef();
-    const videoEl = useRef(null);
-    const qrBoxEl = useRef(null);
-    const [qrOn, setQrOn] = useState(true);
-
-  const [scannedResult, setScannedResult] = useState("");
-    // Success
-    const onScanSuccess = async (result) => {
-        console.log(result);
-        let codes = result?.data.split('#');
-        if(codes.length < 4)
-            return
-        let codeObj = {
-            index: codes[0],
-            userEmail: codes[1],
-            secretKey: codes[2],
-            id: codes[3],
-        }
-        checkValid(codeObj);
-        setScannedResult( result?.data);
-      };
-      const getCams = async() => {
-
-        let cams = await QrScanner.listCameras(true);
-        // alert(JSON.stringify(cams))
-        let camera = cams.find(item => item.label.includes("back"));
-        
-        scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
-        onDecodeError: onScanFail,
-        preferredCamera: camera.id,
-        highlightScanRegion: true,
-        highlightCodeOutline: true,
-        overlay: qrBoxEl?.current || undefined,
-        });
-        // alert(camera.id)
-        await scanner.current.setCamera(camera.id)
-        // 🚀 Start QR Scanner
-        scanner?.current
-        ?.start()
-        .then(() => setQrOn(true))
-        .catch((err) => {
-            if (err) setQrOn(false);
-        });
-      }
-      // Fail
-      const onScanFail = (err) => {
-        // 🖨 Print the "err" to browser console.
-        console.log(err);
-      };
-    
-      useEffect(() => {
-        if (videoEl?.current && !scanner.current) {
-            getCams();
-          // 👉 Instantiate the QR Scanner
-        }
-    
-        
-        return () => {
-          if (!videoEl?.current) {
-            scanner?.current?.stop();
-          }
-        };
-      }, []);
-    
-      
-      useEffect(() => {
-        if (!qrOn)
-          alert(
-            "Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
-          );
-      }, [qrOn]);
-    
-      return (
-        <div className="qr-reader">
-        
-          <video ref={videoEl}></video>
-          {scannedResult && (
-            <p
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 99999,
-                color: "white",
-              }}
-            >
-              Scanned Result: {scannedResult}
-            </p>
-          )}
-        </div>
-      );
-}
-
-export default QrReader;*/
+ 
 import "./QrStyles.css";
 import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
@@ -108,7 +6,7 @@ import QrFrame from "./qr-frame.svg";
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
-
+import { Modal, Box, Typography,  useTheme, useMediaQuery } from '@mui/material';
 
 const StyledButton = styled(Button)(({ theme }) => ({
     backgroundColor: theme.palette.grey[800], // Adjust button background color
@@ -182,16 +80,37 @@ const QrReader = ({ checkValid }) => {
     }
   }, [qrOn]);
 
+  const fadeIn = keyframes`
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  `;
+
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    // width: { xs: '90vw', sm: '33vw' },  
+    width: fullScreen ? '90%' : 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 2,
+    animation: `${fadeIn} 500ms ease-out`
+  };
   return (
-    <div className="qr-reader">
+  <Modal open={true}>
+    <Box sx={modalStyle}>
       <video ref={videoEl}></video>
-      {scannedResult && <p style={{ position: "absolute", top: 0, left: 0, zIndex: 99999, color: "white" }}>
-        Scanned Result: {scannedResult}
-      </p>}
       {cameras.length > 1 && <StyledButton onClick={toggleCamera} size="large" variant="contained">
                                 Switch Camera
                              </StyledButton>}
-    </div>
+    </Box>
+    </Modal>
   );
 };
 
