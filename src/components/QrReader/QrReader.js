@@ -2,7 +2,7 @@ import "./QrStyles.css";
 import { useEffect, useRef, useState } from "react";
 // Qr Scanner
 import QrScanner from "qr-scanner";
-import { OneOffQrScanner } from 'react-webcam-qr-scanner.ts'
+import QrFrame from "./qr-frame.svg";
 
 const QrReader = ({checkValid}) => {
 
@@ -14,8 +14,7 @@ const QrReader = ({checkValid}) => {
   const [scannedResult, setScannedResult] = useState("");
     // Success
     const onScanSuccess = async (result) => {
-        alert(result);
-        alert(typeof result);
+        console.log(result);
         let codes = result?.data.split('#');
         if(codes.length < 4)
             return
@@ -43,6 +42,7 @@ const QrReader = ({checkValid}) => {
         });
         // alert(camera.id)
         await scanner.current.setCamera(camera.id)
+        // 🚀 Start QR Scanner
         scanner?.current
         ?.start()
         .then(() => setQrOn(true))
@@ -56,36 +56,32 @@ const QrReader = ({checkValid}) => {
         console.log(err);
       };
     
-    //   useEffect(() => {
-    //     if (videoEl?.current && !scanner.current) {
-    //         getCams();
-    //       // 👉 Instantiate the QR Scanner
-    //     }
+      useEffect(() => {
+        if (videoEl?.current && !scanner.current) {
+            getCams();
+          // 👉 Instantiate the QR Scanner
+        }
     
         
-    //     return () => {
-    //       if (!videoEl?.current) {
-    //         scanner?.current?.stop();
-    //       }
-    //     };
-    //   }, []);
+        return () => {
+          if (!videoEl?.current) {
+            scanner?.current?.stop();
+          }
+        };
+      }, []);
     
       
-    //   useEffect(() => {
-    //     if (!qrOn)
-    //       alert(
-    //         "Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
-    //       );
-    //   }, [qrOn]);
+      useEffect(() => {
+        if (!qrOn)
+          alert(
+            "Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
+          );
+      }, [qrOn]);
     
       return (
         <div className="qr-reader">
           {/* QR */}
-          <OneOffQrScanner
-                onQrCode={onScanSuccess}
-                hidden={false} /* optional: set true to hide the video-preview */
-            />
-          {/* <video ref={videoEl}></video>
+          <video ref={videoEl}></video>
           {scannedResult && (
             <p
               style={{
@@ -98,7 +94,7 @@ const QrReader = ({checkValid}) => {
             >
               Scanned Result: {scannedResult}
             </p>
-          )} */}
+          )}
         </div>
       );
 }
