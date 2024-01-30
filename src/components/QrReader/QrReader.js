@@ -2,7 +2,7 @@ import "./QrStyles.css";
 import { useEffect, useRef, useState } from "react";
 // Qr Scanner
 import QrScanner from "qr-scanner";
-import BarcodeScannerComponent from "react-qr-barcode-scanner";
+import BarcodeScannerComponent from "react-barcode-scanner-updated";
 
 const QrReader = ({checkValid}) => {
 
