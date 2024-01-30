@@ -2,7 +2,7 @@ import "./QrStyles.css";
 import { useEffect, useRef, useState } from "react";
 // Qr Scanner
 import QrScanner from "qr-scanner";
-import BarcodeScannerComponent from "react-barcode-scanner-updated";
+import { OneOffQrScanner } from 'react-webcam-qr-scanner.ts'
 
 const QrReader = ({checkValid}) => {
 
@@ -15,6 +15,7 @@ const QrReader = ({checkValid}) => {
     // Success
     const onScanSuccess = async (result) => {
         alert(result);
+        alert(typeof result);
         let codes = result?.data.split('#');
         if(codes.length < 4)
             return
@@ -81,19 +82,10 @@ const QrReader = ({checkValid}) => {
       return (
         <div className="qr-reader">
           {/* QR */}
-        <BarcodeScannerComponent
-            width={500}
-            height={500}
-            onUpdate={(err, result) => {
-                if (result) onScanSuccess(result?.text);
-                else {
-                    alert(err)
-                    alert(result)
-                }
-            // if (result) setData(result.text);
-            // else setData("Not Found");
-            }}
-        />
+          <OneOffQrScanner
+                onQrCode={onScanSuccess}
+                hidden={false} /* optional: set true to hide the video-preview */
+            />
           {/* <video ref={videoEl}></video>
           {scannedResult && (
             <p
