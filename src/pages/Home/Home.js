@@ -65,6 +65,7 @@ export default function Home() {
 
     const verifyQRData = async(qrData, eventId) => {
       alert(qrData)
+      alert(typeof qrData)
       const response = await axios.get(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {params: {userEmail: qrData.userEmail, id: qrData.id, secretKey: qrData.secretKey}}).then((result) => {
         setAlertData({type: "success", msg: "User Is Authorized"})
       }).catch(e => {
