@@ -114,7 +114,7 @@ const QrReader = ({ checkValid }) => {
   const [scannedResult, setScannedResult] = useState("");
 
   const onScanSuccess = async (result) => {
-    console.log(result);
+    alert(result);
     let codes = result?.data.split('#');
     if (codes.length < 4) return;
     let codeObj = {
