@@ -104,12 +104,12 @@ const QrReader = ({ checkValid }) => {
   };
   return (
   <Modal open={true}>
-    <Box sx={modalStyle} className="qr-reader">
+    <div className="qr-reader">
       <video ref={videoEl}></video>
       {cameras.length > 1 && <StyledButton onClick={toggleCamera} size="large" variant="contained">
                                 Switch Camera
                              </StyledButton>}
-    </Box>
+    </div>
     </Modal>
   );
 };
