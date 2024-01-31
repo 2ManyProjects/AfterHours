@@ -81,11 +81,13 @@ const QrReader = ({ checkValid }) => {
 
   useEffect(() => {
     QrScanner.listCameras(true).then(setCameras);
+  }, []);
+  useEffect(() => {
     let camId = readCameraIDFromLocalStorage();
     if(camId){
         setActiveCameraId(camId);
     }
-  }, []);
+  }, [cameras]);
 
   useEffect(() => {
     if (activeCameraId && videoEl.current) {
