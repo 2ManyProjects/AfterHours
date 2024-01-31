@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
+    width: { xs: '85vw', sm: '33vw' },  
     transform: 'translate(-50%, -50%)',
-    width: 400,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-  };
+};
   
 
 const SignUpModal = ({ open, onClose, signUp }) => {

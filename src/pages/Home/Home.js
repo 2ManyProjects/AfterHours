@@ -68,12 +68,16 @@ export default function Home() {
     const verifyQRData = async(qrData, eventId) => {
       // alert(qrData)
       // alert(typeof qrData)
-      const response = await axios.get(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {params: {userEmail: qrData.userEmail, id: qrData.id, secretKey: qrData.secretKey}}).then((result) => {
+      const response = await axios.get(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {params: {userEmail: qrData.userEmail, id: qrData.id, secretKey: qrData.secretKey},
+      headers: {
+        'Authorization': `Bearer ${session?.AccessToken}`,
+        // ... any other headers
+      }}).then((result) => {
         setAlertData({type: "success", msg: "User Is Authorized"})
       }).catch(e => {
         setAlertData({type: "warning", msg: "User is Not Authorized"})
       });
-      alert(response);
+      // alert(response);
       // console.log(response)
     }
 
@@ -92,7 +96,7 @@ export default function Home() {
     }
 
     return (
-      <div> 
+      <div>  
         <SuccessModal/>
         {!isLoading && !error && data?.length > 0 && <BookingModal open={openBookingModal} ticketPrice={data[0].ticketPrice}eventId={data[0].id} onClose={() => setOpenBookingModal(false)}/>}
         <Snackbar open={!!alertData} autoHideDuration={6000} onClose={() => setAlertData(null)}>

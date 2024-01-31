@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 // Similar to LoginModal, but specific for changing the password
+
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
+    width: { xs: '85vw', sm: '33vw' },  
     transform: 'translate(-50%, -50%)',
-    width: 400,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-  };
+};
   
 const ChangePasswordModal = ({ open, onClose, changePassword }) => {
     const [currentPassword, setCurrentPassword] = useState('');
