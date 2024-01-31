@@ -136,7 +136,7 @@ const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
                     <FormLabel component="legend">Payment Method</FormLabel>
                         <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
                         <FormControlLabel value={etranId} sx={{ color: 'black' }} control={<Radio />} label="E-Transfer" />
-                        <FormControlLabel value={ccId} sx={{ color: 'black' }} control={<Radio />} label="Credit/Debit Card" />
+                        <FormControlLabel disabled value={ccId} sx={{ color: 'black' }} control={<Radio />} label="Credit/Debit Card (Disabled till Business License)" />
                     </RadioGroup>
                     <TextField
                     label="Email Address For E-Ticket"
@@ -146,7 +146,7 @@ const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
                     error={!isEmailValid && email !== ''}
                     helperText={!isEmailValid && email !== '' ? "Enter a valid email address" : ""}
                     />
-                    <Typography sx={{fontSize: 12, color: 'black'}}>* We do not store your email or add you to any mailing list</Typography>
+                    <Typography sx={{fontSize: 12, color: 'black'}}>* We do not add you to any mailing lists</Typography>
                 </FormControl>
             );
         case 1:

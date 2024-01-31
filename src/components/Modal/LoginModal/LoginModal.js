@@ -58,9 +58,9 @@ const LoginModal = ({ open, onClose, login, forgotPassword }) => {
           <Button variant="contained" disabled={isFetching} onClick={handleLogin}>
             Login
           </Button>
-          <Button color="secondary" onClick={handleForgotPassword}>
+          {/* <Button color="secondary" onClick={handleForgotPassword}>
             Forgot Password?
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Modal>
