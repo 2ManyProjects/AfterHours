@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, RadioGroup, FormControlLabel, Radio, TextField, Button, Select, MenuItem, FormControl, FormLabel, IconButton } from '@mui/material';
+import { Modal, Box, Typography, RadioGroup, FormControlLabel, Radio, TextField, Button, Select, MenuItem, FormControl, FormLabel, IconButton, Switch } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {validate} from "email-validator";
 import {
@@ -48,6 +48,7 @@ const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
     const [transactionConfirmationCode, setTransactionConfirmationCode] = useState(null);
     const [dietaryRestriction, setDietaryRestriction] = useState('');
     const [allergen, setAllergen] = useState('');
+    const [over18, setOver18] = useState(false);
     const [allergenSeverity, setAllergenSeverity] = useState('');
     const [notes, setNotes] = useState('');
     const [email, setEmail] = useState('');
@@ -164,9 +165,9 @@ const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
                 fullWidth
                 >
                     <MenuItem value='none'>None</MenuItem>
-                <MenuItem value="mild">Mild (Coughing, Rash, Localized itching,  digestive issues)</MenuItem>
-                <MenuItem value="medium">Medium (Facial swelling, widespreach rash / itching, Hives, difficulty breathing, nausea)</MenuItem>
-                <MenuItem value="severe">Medically Severe (requires Epi-pen or medical assistance on exposure, high risk of anaphylaxis shock)</MenuItem>
+                    <MenuItem value="mild">Mild (Coughing, Rash, Localized itching,  digestive issues)</MenuItem>
+                    <MenuItem value="medium">Medium (Facial swelling, widespreach rash / itching, Hives, difficulty breathing, nausea)</MenuItem>
+                    <MenuItem value="severe">Medically Severe (requires Epi-pen or medical assistance on exposure, high risk of anaphylaxis shock)</MenuItem>
                 </Select>
                 <TextField
                 label="Notes"
@@ -175,6 +176,15 @@ const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
                 fullWidth
                 multiline
                 />
+                
+                <FormControlLabel
+                    value="top"
+                    onChange={(event) => setOver18(event.target.checked)}
+                    control={<Switch color="primary" />}
+                    sx={{ color: 'black' }}
+                    label={`I am ${over18? "" : "not " }over 18`}
+                    // labelPlacement="top"
+                    />
             </>
             );
         case 2:

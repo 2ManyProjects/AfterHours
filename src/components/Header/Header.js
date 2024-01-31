@@ -38,13 +38,13 @@ const Header = () => {
     <header style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
       <MenuButton />
       <LoginModal open={showLogin} onClose={() => setShowLogin(false)} login={async(email, password) => {
-        let loginResult = await login(email, password)
-        if(loginResult){
-          dispatch(StateLogin({...loginResult?.data, email}));
-          setShowLogin(false)
-        }
-        console.log(loginResult);
-      }}
+          let loginResult = await login(email, password)
+          if(loginResult){
+            dispatch(StateLogin({...loginResult?.data, email}));
+            setShowLogin(false)
+          }
+          console.log(loginResult);
+        }}
         forgotPassword={async(email) => {
           let forgotPasswordResult = await forgotPassword(email)
           console.log(forgotPasswordResult);
