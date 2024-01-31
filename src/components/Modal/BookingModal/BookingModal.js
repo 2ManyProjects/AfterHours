@@ -207,24 +207,23 @@ const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
             return null;
         }
     };
-
+    
     return (
         <Modal open={open} onClose={localClose}>
         <Box sx={{ 
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        width: { xs: '85vw', sm: '33vw' },  
-        height: { xs: '70vh', sm: '75vh' }, 
-        transform: 'translate(-50%, -50%)',
-        bgcolor: 'background.paper',
-        overflowY: 'auto',
-        p: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        background: `#e8c7d0`, 
-        borderRadius: '16px' 
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: { xs: '85vw', sm: '33vw' },  
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            overflowY: 'auto',
+            p: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            background: `#e8c7d0`, 
+            borderRadius: '16px' 
         }}>
         <IconButton 
             onClick={localClose} 

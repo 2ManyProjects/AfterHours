@@ -12,6 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import QrReader from '../../components/QrReader/QrReader';
 import { useDispatch, useSelector } from 'react-redux';
+import CircularProgress from '@mui/material/CircularProgress'; 
 
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -98,6 +99,10 @@ export default function Home() {
     return (
       <div>  
         <SuccessModal/>
+        {isLoading && 
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+                </div>}
         {!isLoading && !error && data?.length > 0 && <BookingModal open={openBookingModal} ticketPrice={data[0].ticketPrice}eventId={data[0].id} onClose={() => setOpenBookingModal(false)}/>}
         <Snackbar open={!!alertData} autoHideDuration={6000} onClose={() => setAlertData(null)}>
           <Alert

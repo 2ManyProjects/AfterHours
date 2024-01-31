@@ -5,6 +5,8 @@ import QrScanner from "qr-scanner";
 import QrFrame from "./qr-frame.svg";
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 
 
@@ -17,8 +19,36 @@ const StyledButton = styled(Button)(({ theme }) => ({
     margin: theme.spacing(2),
   }));
 
+
+    function writeCameraIDToLocalStorage(cameraID) {
+        try {
+            localStorage.setItem('CameraID', cameraID);
+            console.log('Camera ID saved to localStorage.');
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }
+
+    // Function to read the camera ID from localStorage
+    function readCameraIDFromLocalStorage() {
+        try {
+            const cameraID = localStorage.getItem('CameraID');
+            if (cameraID === null) {
+            console.log('No camera ID found in localStorage.');
+            return null;
+            } else {
+            console.log('Camera ID retrieved from localStorage:', cameraID);
+            return cameraID;
+            }
+        } catch (error) {
+            console.error('Error reading from localStorage:', error);
+            return null;
+        }
+    }
+
 const QrReader = ({ checkValid }) => {
   const videoEl = useRef(null);
+  const [alertData, setAlertData] = useState(null);
   const [cameras, setCameras] = useState([]);
   const [activeCameraId, setActiveCameraId] = useState(null);
   const [qrOn, setQrOn] = useState(true);
@@ -33,6 +63,7 @@ const QrReader = ({ checkValid }) => {
       secretKey: codes[2],
       id: codes[3],
     };
+    writeCameraIDToLocalStorage(activeCameraId);
     checkValid(codeObj);
     setScannedResult(result?.data);
   };
@@ -50,6 +81,10 @@ const QrReader = ({ checkValid }) => {
 
   useEffect(() => {
     QrScanner.listCameras(true).then(setCameras);
+    let camId = readCameraIDFromLocalStorage();
+    if(camId){
+        setActiveCameraId(camId);
+    }
   }, []);
 
   useEffect(() => {
@@ -81,6 +116,16 @@ const QrReader = ({ checkValid }) => {
 
   return (
     <div className="qr-reader">
+    <Snackbar open={!!alertData} autoHideDuration={6000} onClose={() => setAlertData(null)}>
+      <Alert
+        onClose={() => setAlertData(null)}
+        severity={alertData?.type}
+        variant="filled"
+        sx={{ width: '100%' }}
+      >
+        {alertData?.msg}
+      </Alert>
+    </Snackbar>
         {cameras.length > 1 && <StyledButton onClick={toggleCamera} size="large" variant="contained">
             Switch Camera
         </StyledButton>}
