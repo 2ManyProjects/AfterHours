@@ -82,10 +82,12 @@ const QrReader = ({ checkValid }) => {
   useEffect(() => {
     QrScanner.listCameras(true).then(setCameras);
   }, []);
+
+  
   useEffect(() => {
     let camId = readCameraIDFromLocalStorage();
     if(camId){
-        setAlertData({type: "success", msg: `ID: ${camId}`})
+        // setAlertData({type: "success", msg: `ID: ${camId}`})
         setActiveCameraId(camId);
     }
   }, [cameras]);

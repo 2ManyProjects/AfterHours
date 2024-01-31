@@ -53,8 +53,26 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(2),
 }));
 
+const isMobile = () => {
+  // Patterns to detect mobile devices
+  const toMatch = [
+    /Android/i,
+    /webOS/i,
+    /iPhone/i,
+    /iPad/i,
+    /iPod/i,
+    /BlackBerry/i,
+    /Windows Phone/i
+  ];
+
+  // Check if any of the patterns match the user agent string
+  return toMatch.some((toMatchItem) => {
+    return navigator.userAgent.match(toMatchItem);
+  });
+};
+
 export default function Home() {
-  const {isLoggedIn, user, session} = useSelector(state => state.auth)
+  const {isLoggedIn, user, session, userData} = useSelector(state => state.auth)
     const [openBookingModal, setOpenBookingModal] = useState(false);
     const [scanningModal, setOpenScanningModal] = useState(false);
     const [alertData, setAlertData] = useState(null);
@@ -95,7 +113,7 @@ export default function Home() {
         maxTickets += data[0]?.overFlowMax
       }
     }
-
+    // console.log(userData)
     return (
       <div>  
         <SuccessModal/>
@@ -114,7 +132,7 @@ export default function Home() {
             {alertData?.msg}
           </Alert>
         </Snackbar>
-        {scanningModal && <QrReader
+        {scanningModal && isMobile() && userData && userData["cognito:groups"]?.includes("Admin") && <QrReader
         checkValid={(qrData) => {
           verifyQRData(qrData, data[0].id)
           setOpenScanningModal(false);
@@ -160,7 +178,7 @@ export default function Home() {
                     {hasTickets && <StyledButton onClick={() => setOpenBookingModal(!openBookingModal)}size="large" variant="contained">
                       Buy Ticket - ${data[0]?.ticketPrice}
                     </StyledButton>}
-                    {session && <StyledButton onClick={async () =>{
+                    {session && isMobile() && <StyledButton onClick={async () =>{
                       await navigator.mediaDevices.getUserMedia({ video: true })
                       setOpenScanningModal(!scanningModal)
                       }}size="large" variant="contained">

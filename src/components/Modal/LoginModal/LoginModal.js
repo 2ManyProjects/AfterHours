@@ -15,10 +15,14 @@ const style = {
 const LoginModal = ({ open, onClose, login, forgotPassword }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async() => {
     // Handle login logic
-    login(email,password)
+    setIsFetching(true);
+    // setTimeout(()=> setIsFetching(false), 1500)
+    await login(email,password);
+    setIsFetching(false);
   };
 
   const handleForgotPassword = () => {
@@ -51,7 +55,7 @@ const LoginModal = ({ open, onClose, login, forgotPassword }) => {
           required
         />
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-          <Button variant="contained" onClick={handleLogin}>
+          <Button variant="contained" disabled={isFetching} onClick={handleLogin}>
             Login
           </Button>
           <Button color="secondary" onClick={handleForgotPassword}>
