@@ -33,7 +33,7 @@ function CopyBox({ text, copyText }) {
   
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: 'column' }}>
-        <Typography variant="body1">{text}</Typography>
+        <Typography variant="body1"sx={{ textAlign: 'center', color: 'grey' }}>{text}</Typography>
         <Tooltip title="Copy to clipboard">
           <IconButton onClick={handleCopy}>
             <ContentCopyIcon fontSize="small" />
@@ -190,12 +190,14 @@ const BookingModal = ({ open, onClose, eventId, ticketPrice }) => {
         case 2:
             return paymentMethod === etranId ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexDirection: 'column' }}>
-                    <Typography>E-Transfer ${ticketPrice} (CAD)</Typography>
+                    <Typography sx={{ textAlign: 'center', color: 'grey' }}>E-Transfer ${ticketPrice} (CAD)</Typography>
                     {!transactionConfirmationCode && <Button onClick={initEtransfer} disabled={fetching} >Confirm Ticket For E-transfer Instructions</Button>}
-                    {transactionConfirmationCode && <Typography>Include the following in the Message box of the E-transfer</Typography>}
-                    {transactionConfirmationCode && <CopyBox text={transactionConfirmationCode} copyText={transactionConfirmationCode}/>}
+                    {transactionConfirmationCode && <Typography sx={{ textAlign: 'center', color: 'grey' }}>You have 3 hours to send the E-transfer</Typography>}
+                    {transactionConfirmationCode && <Typography sx={{ textAlign: 'center', color: 'grey' }}>Before the ticket is put back up for sale</Typography>}
                     {transactionConfirmationCode && <CopyBox text={"send to Payments@mail.afterhours.2many.ca"} copyText={"Payments@mail.afterhours.2many.ca"}/>}
-                    {transactionConfirmationCode && <Typography>Set the transaction password to</Typography>}
+                    {transactionConfirmationCode && <Typography sx={{ textAlign: 'center', color: 'grey' }}>Include the following in the Message box of the E-transfer</Typography>}
+                    {transactionConfirmationCode && <CopyBox text={transactionConfirmationCode} copyText={transactionConfirmationCode}/>}
+                    {transactionConfirmationCode && <Typography sx={{ textAlign: 'center', color: 'grey' }}>Set the transaction password to</Typography>}
                     {transactionConfirmationCode && <CopyBox text={"AfterHours"} copyText={"AfterHours"}/>}
                 </Box>
             ) : (
