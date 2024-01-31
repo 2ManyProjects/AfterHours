@@ -11,6 +11,7 @@ import SuccessModal from '../../components/Modal/BookingModal/SuccessModal';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import QrReader from '../../components/QrReader/QrReader';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -52,6 +53,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function Home() {
+  const {isLoggedIn, user, session} = useSelector(state => state.auth)
     const [openBookingModal, setOpenBookingModal] = useState(false);
     const [scanningModal, setOpenScanningModal] = useState(false);
     const [alertData, setAlertData] = useState(null);
@@ -149,12 +151,12 @@ export default function Home() {
                     {hasTickets && <StyledButton onClick={() => setOpenBookingModal(!openBookingModal)}size="large" variant="contained">
                       Buy Ticket - ${data[0]?.ticketPrice}
                     </StyledButton>}
-                    <StyledButton onClick={async () =>{
+                    {session && <StyledButton onClick={async () =>{
                       await navigator.mediaDevices.getUserMedia({ video: true })
                       setOpenScanningModal(!scanningModal)
                       }}size="large" variant="contained">
                       Scan Ticket
-                    </StyledButton>
+                    </StyledButton>}
                     {/* <StyledButton onClick={() => verifyQRData({"index":10,"userEmail":"shaivkamat@gmail.com","secretKey":"eefa692d-25de-4776-b3a9-64ab1196c82a","id":"c9ac916c-ba4d-4edc-bb48-d02359757d57-10"}, data[0]?.id)}size="large" variant="contained">
                       Test Ticket Verification
                     </StyledButton> */}
