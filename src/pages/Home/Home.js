@@ -13,6 +13,7 @@ import Alert from '@mui/material/Alert';
 import QrReader from '../../components/QrReader/QrReader';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress'; 
+import TicketInfoModal from '../../components/Modal/TicketInfoModal/TicketInfoModal';
 
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -73,6 +74,7 @@ const isMobile = () => {
 
 export default function Home() {
   const {isLoggedIn, user, session, userData} = useSelector(state => state.auth)
+    const [showTicket, setShowTicket] = useState(false); 
     const [openBookingModal, setOpenBookingModal] = useState(false);
     const [scanningModal, setOpenScanningModal] = useState(false);
     const [alertData, setAlertData] = useState(null);
@@ -90,9 +92,15 @@ export default function Home() {
       const response = await axios.get(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/event/${eventId}/payments`, {params: {userEmail: qrData.userEmail, id: qrData.id, secretKey: qrData.secretKey},
       headers: {
         'Authorization': `Bearer ${session?.AccessToken}`,
-        // ... any other headers
+        
       }}).then((result) => {
-        setAlertData({type: "success", msg: "User Is Authorized"})
+        console.log(result);
+        if(result.status === 200 && result?.data?.data){
+          setShowTicket({ticketData: result?.data?.data});
+          setAlertData({type: "success", msg: "User Is Authorized"})
+        }else {
+          setAlertData({type: "warning", msg: "User is Not Authorized"})
+        }
       }).catch(e => {
         setAlertData({type: "warning", msg: "User is Not Authorized"})
       });
@@ -116,6 +124,7 @@ export default function Home() {
     // console.log(userData)
     return (
       <div>  
+        <TicketInfoModal open={!!showTicket} onClose={() => setShowTicket(false)} ticketData={showTicket?.ticketData}/>
         <SuccessModal/>
         {isLoading && 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -178,15 +187,15 @@ export default function Home() {
                     {hasTickets && <StyledButton onClick={() => setOpenBookingModal(!openBookingModal)}size="large" variant="contained">
                       Buy Ticket - ${data[0]?.ticketPrice}
                     </StyledButton>}
-                    {session && isMobile() && <StyledButton onClick={async () =>{
+                    {session && isMobile() && userData && userData["cognito:groups"]?.includes("Admin") &&  <StyledButton onClick={async () =>{
                       await navigator.mediaDevices.getUserMedia({ video: true })
                       setOpenScanningModal(!scanningModal)
                       }}size="large" variant="contained">
                       Scan Ticket
                     </StyledButton>}
-                    {/* <StyledButton onClick={() => verifyQRData({"index":10,"userEmail":"shaivkamat@gmail.com","secretKey":"eefa692d-25de-4776-b3a9-64ab1196c82a","id":"c9ac916c-ba4d-4edc-bb48-d02359757d57-10"}, data[0]?.id)}size="large" variant="contained">
+                    {/* {session && userData && userData["cognito:groups"]?.includes("Admin") &&<StyledButton onClick={() => verifyQRData({"index":10,"userEmail":"shaivkamat@gmail.com","secretKey":"eefa692d-25de-4776-b3a9-64ab1196c82a","id":"c9ac916c-ba4d-4edc-bb48-d02359757d57-10"}, data[0]?.id)}size="large" variant="contained">
                       Test Ticket Verification
-                    </StyledButton> */}
+                    </StyledButton>} */}
                   </CardActions>
                 </StyledCard>}
               </Grid>
