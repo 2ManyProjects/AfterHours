@@ -6,6 +6,7 @@ import MenuButton from './MenuButton/MenuButton.js';
 import LoginModal from '../Modal/LoginModal/LoginModal.js';
 import ChangePasswordModal from '../Modal/ChangePasswordModal/ChangePasswordModal.js';
 import SignUpModal from '../Modal/SignupModal/SignupModal.js';
+import MailModal from '../Modal/MailModal/MailModal.js';
 import { useDispatch, useSelector } from 'react-redux';
 import {login as StateLogin, logout as StateLogout} from '../../state/authSlice.js';
 import { changePassword, forgotPassword, login, signUp, getCognitoUser} from '../../state/CognitoHelper.js';
@@ -15,6 +16,7 @@ const Header = () => {
   
   const [showLogin, setShowLogin] = useState(false); 
   const [showSignup, setShowSignup] = useState(false); 
+  const [showMailModal, setShowMailModal] = useState(false); 
   const [showChangePassword, setShowChangePassword] = useState(false); 
   const {isLoggedIn, user, session} = useSelector(state => state.auth)
   
@@ -37,6 +39,7 @@ const Header = () => {
   return (
     <header style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
       <MenuButton />
+      <MailModal  open={showMailModal} onClose={() => setShowMailModal(false)} />
       <LoginModal open={showLogin} onClose={() => setShowLogin(false)} login={async(email, password) => {
           let loginResult = await login(email, password)
           if(loginResult){
@@ -60,6 +63,7 @@ const Header = () => {
         }}/>
 
       <nav>
+        <Button color="inherit" onClick={() => setShowMailModal(true)}>MailList</Button>
         {!isLoggedIn ? (
           <>
             <Button color="inherit" onClick={handleLogin}>Login</Button>
