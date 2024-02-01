@@ -7,6 +7,7 @@ import LoginModal from '../Modal/LoginModal/LoginModal.js';
 import ChangePasswordModal from '../Modal/ChangePasswordModal/ChangePasswordModal.js';
 import SignUpModal from '../Modal/SignupModal/SignupModal.js';
 import MailModal from '../Modal/MailModal/MailModal.js';
+import MailInfoModal from '../Modal/MailInfoModal/MailInfoModal.js';
 import { useDispatch, useSelector } from 'react-redux';
 import {login as StateLogin, logout as StateLogout} from '../../state/authSlice.js';
 import { changePassword, forgotPassword, login, signUp, getCognitoUser} from '../../state/CognitoHelper.js';
@@ -16,9 +17,10 @@ const Header = () => {
   
   const [showLogin, setShowLogin] = useState(false); 
   const [showSignup, setShowSignup] = useState(false); 
+  const [showMailInfoModal, setShowMailInfoModal] = useState(false); 
   const [showMailModal, setShowMailModal] = useState(false); 
   const [showChangePassword, setShowChangePassword] = useState(false); 
-  const {isLoggedIn, user, session} = useSelector(state => state.auth)
+  const {isLoggedIn, user, session, userData} = useSelector(state => state.auth)
   
   const handleLogin = () => {
     console.log('Login action');
@@ -39,6 +41,7 @@ const Header = () => {
   return (
     <header style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
       <MenuButton />
+      {userData && userData["cognito:groups"]?.includes("Admin") && <MailInfoModal open={showMailInfoModal} onClose={() => setShowMailInfoModal(false)}/>}
       <MailModal  open={showMailModal} onClose={() => setShowMailModal(false)} />
       <LoginModal open={showLogin} onClose={() => setShowLogin(false)} login={async(email, password) => {
           let loginResult = await login(email, password)
@@ -46,23 +49,24 @@ const Header = () => {
             dispatch(StateLogin({...loginResult?.data, email}));
             setShowLogin(false)
           }
-          console.log(loginResult);
+          // console.log(loginResult);
         }}
         forgotPassword={async(email) => {
           let forgotPasswordResult = await forgotPassword(email)
-          console.log(forgotPasswordResult);
+          // console.log(forgotPasswordResult);
         }}/>
       <SignUpModal open={showSignup} onClose={() => setShowSignup(false)} signUp={async(email, password) => {
         let signUpResult = await signUp(email, password)
-        console.log(signUpResult);
+        // console.log(signUpResult);
       }}/>
       <ChangePasswordModal open={showChangePassword} onClose={() => setShowChangePassword(false)}
         changePassword={async(oldpassword, newpassword) => {
           let changePasswordResult = await changePassword(session, user, oldpassword, newpassword)
-          console.log(changePasswordResult);
+          // console.log(changePasswordResult);
         }}/>
 
       <nav>
+        {userData && userData["cognito:groups"]?.includes("Admin") && <Button color="inherit" onClick={() => setShowMailInfoModal(true)}>MailInfo</Button>}
         <Button color="inherit" onClick={() => setShowMailModal(true)}>MailList</Button>
         {!isLoggedIn ? (
           <>
