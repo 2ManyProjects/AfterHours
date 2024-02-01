@@ -24,9 +24,9 @@ const MailInfoModal = ({ open, onClose,}) => {
         // "Maillist" : "Waitlist"
         const response = await axios.get(`https://evdfbs5cqj.execute-api.ca-central-1.amazonaws.com/Prod/v1/email/list`, {params: { reqType: str , returnVals: true },
         headers: {
-          'Authorization': `Bearer ${session?.AccessToken}`,
-          
-        }})
+          'Authorization': `Bearer ${session?.AccessToken}`
+        }}).catch(() => {
+        });
         setIsFetching(false);
         // console.log(response);
         if(response.status === 200){

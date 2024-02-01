@@ -193,9 +193,9 @@ export default function Home() {
                       }}size="large" variant="contained">
                       Scan Ticket
                     </StyledButton>}
-                    {/* {session && userData && userData["cognito:groups"]?.includes("Admin") &&<StyledButton onClick={() => verifyQRData({"index":10,"userEmail":"shaivkamat@gmail.com","secretKey":"eefa692d-25de-4776-b3a9-64ab1196c82a","id":"c9ac916c-ba4d-4edc-bb48-d02359757d57-10"}, data[0]?.id)}size="large" variant="contained">
+                    {session && userData && userData["cognito:groups"]?.includes("Admin") &&<StyledButton onClick={() => verifyQRData({"index":10,"userEmail":"shaivkamat@gmail.com","secretKey":"eefa692d-25de-4776-b3a9-64ab1196c82a","id":"c9ac916c-ba4d-4edc-bb48-d02359757d57-10"}, data[0]?.id)}size="large" variant="contained">
                       Test Ticket Verification
-                    </StyledButton>} */}
+                    </StyledButton>}
                   </CardActions>
                 </StyledCard>}
               </Grid>
